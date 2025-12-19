@@ -1,11 +1,4 @@
 ########################################
-# Provider
-########################################
-provider "aws" {
-  region = "us-west-2"
-}
-
-########################################
 # Data Sources
 ########################################
 
@@ -36,7 +29,7 @@ data "aws_ami" "ubuntu" {
     values = ["hvm"]
   }
 
-  owners = ["099720109477"]  # Canonical
+  owners = ["099720109477"] # Canonical
 }
 
 ########################################
@@ -189,19 +182,4 @@ resource "aws_autoscaling_group" "example" {
     value               = "terraform-example-asg"
     propagate_at_launch = true
   }
-}
-
-########################################
-# Variables & Outputs
-########################################
-
-variable "server_port" {
-  description = "Port application listens on"
-  type        = number
-  default     = 8080
-}
-
-output "alb_dns_name" {
-  description = "Public DNS name of the load balancer"
-  value       = aws_lb.example.dns_name
 }
