@@ -1,4 +1,17 @@
 ########################################
+# Terraform Backend Configuration
+########################################
+
+data "terraform_remote_state" "mysql" {
+  backend = "s3"
+  config = {
+    bucket = "my-terraform-state-bucket-76474"
+    key    = "stage/data-stores/mysql/terraform.tfstate"
+    region = "us-east-2"
+  }
+}
+
+########################################
 # Data Sources
 ########################################
 
@@ -148,11 +161,12 @@ resource "aws_launch_template" "example" {
   image_id      = data.aws_ami.ubuntu.id
   instance_type = "t3.micro"
 
-  user_data = base64encode(<<-EOF
-              #!/bin/bash
-              echo "Hello, World!" > index.html
-              nohup busybox httpd -f -p ${var.server_port} &
-              EOF
+  user_data = base64encode(
+    templatefile("${path.module}/user-data.sh", {
+      server_port = var.server_port
+      db_address  = data.terraform_remote_state.mysql.outputs.address
+      db_port     = data.terraform_remote_state.mysql.outputs.port
+    })
   )
 
   network_interfaces {
