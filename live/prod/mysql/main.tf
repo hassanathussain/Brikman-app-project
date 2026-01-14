@@ -22,12 +22,12 @@ provider "aws" {
 # RDS MySQL Instance
 ########################################
 resource "aws_db_instance" "example" {
-  identifier_prefix   = "terraform-up-and-running"
-  engine              = "mysql"
-  engine_version      = "8.0.43"        # specific supported version
-  instance_class      = "db.t3.micro"   # compatible with MySQL 8
-  allocated_storage   = 10
-  db_name             = "example_database"
+  identifier_prefix = "terraform-up-and-running"
+  engine            = "mysql"
+  engine_version    = "8.0.43"      # specific supported version
+  instance_class    = "db.t3.micro" # compatible with MySQL 8
+  allocated_storage = 10
+  db_name           = "example_database"
 
   username = var.db_username
   password = var.db_password
